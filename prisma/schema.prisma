@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  name      String
+  password  String
+  email     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  revenues  Revenue[]
+  plans     AllocationPlan[]
+  expenses  RealizedExpense[]
+  savings   Saving[]
+}
+
+model Saving {
+  id        String   @id @default(uuid())
+  name      String
+  target    Float    // Target amount
+  current   Float    @default(0) // How much saved so far
+  type      SavingType @default(GOAL) // GOAL, EMERGENCY, INVESTMENT
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Revenue {
+  id          String   @id @default(uuid())
+  amount      Float
+  source      String
+  description String?
+  status      RevenueStatus @default(PENDING) // PAID_CASH, PAID_TF, PENDING
+  date        DateTime @default(now())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AllocationPlan {
+  id          String   @id @default(uuid())
+  category    String
+  amount      Float    // Planned amount
+  frequency   Frequency // DAILY, WEEKLY, MONTHLY, ONE_TIME
+  notes       String?
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  expenses    RealizedExpense[] // Optional relation to track specific expenses against a plan
+}
+
+model RealizedExpense {
+  id          String   @id @default(uuid())
+  amount      Float
+  category    String
+  description String?
+  date        DateTime @default(now())
+  source      String?  // e.g., "From Wallet" or "Notes" field from user
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  planId      String?
+  plan        AllocationPlan? @relation(fields: [planId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum RevenueStatus {
+  PAID_CASH
+  PAID_TF
+  PENDING
+}
+
+enum Frequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  ONE_TIME
+}
+
+enum SavingType {
+  GOAL
+  EMERGENCY
+  INVESTMENT
+}
