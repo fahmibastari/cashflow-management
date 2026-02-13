@@ -3,6 +3,8 @@ import { ArrowLeft, Save, Wallet } from 'lucide-react'
 import { createAllocation } from '@/app/actions/allocation'
 import PageWrapper from '@/app/components/PageWrapper'
 
+export const dynamic = 'force-dynamic'
+
 export default function NewAllocationPage() {
     return (
         <PageWrapper className="flex flex-col gap-6 py-8 pb-32 max-w-md mx-auto">

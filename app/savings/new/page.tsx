@@ -3,6 +3,8 @@ import { ArrowLeft, Save, Target } from 'lucide-react'
 import { createSaving } from '@/app/actions/savings'
 import PageWrapper from '@/app/components/PageWrapper'
 
+export const dynamic = 'force-dynamic'
+
 export default function NewSavingPage() {
     return (
         <PageWrapper className="flex flex-col gap-6 py-8 pb-32 max-w-md mx-auto">

@@ -3,6 +3,8 @@ import { ArrowLeft, Save, DollarSign } from 'lucide-react'
 import { createRevenue } from '@/app/actions/revenue'
 import PageWrapper from '@/app/components/PageWrapper'
 
+export const dynamic = 'force-dynamic'
+
 export default function NewRevenuePage() {
     return (
         <PageWrapper className="flex flex-col gap-6 py-8 pb-32 max-w-md mx-auto">
